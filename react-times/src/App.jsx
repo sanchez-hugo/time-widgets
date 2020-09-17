@@ -6,31 +6,39 @@ import Stopwatch from "./components/Stopwatch";
 import Timer from "./components/Timer";
 import NavBar from "./layout/NavBar";
 
+const BACKGROUND_COLOR = "#292b2c";
+
 class App extends Component {
+
+  componentDidMount(){
+    document.body.style.backgroundColor = BACKGROUND_COLOR;
+  }
+
   render() {
+
     return (
-      <BrowserRouter>
-        <div className="container-fluid">
-          <NavBar />
-          <div>
-            <hr />
-            <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route path="/timer">
-                <Timer />
-              </Route>
-              <Route path="/stopwatch">
-                <Stopwatch />
-              </Route>
-              <Route path="/clock">
-                <Clock />
-              </Route>
-            </Switch>
+        <BrowserRouter>
+          <div className="container-fluid text-white">
+            <NavBar/>
+            <div>
+              <hr className="bg-white"/>
+              <Switch>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route path="/timer">
+                  <Timer />
+                </Route>
+                <Route path="/stopwatch">
+                  <Stopwatch />
+                </Route>
+                <Route path="/clock">
+                  <Clock />
+                </Route>
+              </Switch>
+            </div>
           </div>
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
     );
   }
 }
