@@ -1,1 +1,1 @@
-## Timer app
+## Time Apps: Timer, Stopwatch, Clock
