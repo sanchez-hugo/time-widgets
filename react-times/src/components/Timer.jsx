@@ -120,6 +120,25 @@ class Timer extends Component {
     this.startTimer(this.state.remaindingSeconds);
   };
 
+  onAddTimeClick = (e) => {
+    const event = e;
+    const { value } = event.target;
+    const addedSeconds = Number(value);
+
+    this.addTime(addedSeconds);
+  };
+
+  addTime = (addedSeconds) => {
+    const { remaindingSeconds } = this.state;
+    if (remaindingSeconds > 0) {
+      let totalSeconds = remaindingSeconds + addedSeconds;
+      const time = this.convertSecondsToTime(totalSeconds);
+      this.setTime(time);
+      if (this.state.status.hasStarted) totalSeconds--;
+      this.setRemainingSeconds(totalSeconds);
+    }
+  };
+
   /* Reset */
   onResetClick = () => {
     this.resetTimer();
@@ -219,7 +238,8 @@ class Timer extends Component {
   //#region Time Math
   convertTimeToSeconds = (time) => {
     const { hour, minute, second } = time;
-    const total = hour * SECONDS_IN_HOURS + minute * SECONDS_IN_MINUTES + second;
+    const total =
+      hour * SECONDS_IN_HOURS + minute * SECONDS_IN_MINUTES + second;
     return total;
   };
 
@@ -251,93 +271,157 @@ class Timer extends Component {
 
     return (
       <div className="container-fluid p-3">
-        <div className="card bg-dark text-white">
-          <div className="card-header text-center">
-            <h3 className="card-title font-weight-light">Timer</h3>
-          </div>
-          <div className="card-body">
-            <div className="row justify-content-center">
-              {this.state.status.isComplete ? (
-                <div
-                  className="alert alert-success w-75 text-center"
-                  role="alert"
-                >
-                  Time's up!
+        <div className="row justify-content-center px-md-5">
+          <div className="col-md-8 card bg-dark text-white">
+            <div className="card-header text-center">
+              <h3 className="card-title font-weight-light">Timer</h3>
+            </div>
+            <div className="card-body">
+              <div className="row justify-content-center">
+                {this.state.status.isComplete ? (
+                  <div
+                    className="alert alert-success w-75 text-center"
+                    role="alert"
+                  >
+                    Time's up!
+                  </div>
+                ) : null}
+              </div>
+              <div className="row justify-content-center">
+                <div className="col-3 input-group">
+                  <input
+                    name="hour"
+                    type="number"
+                    className="form-control bg-secondary text-white"
+                    min={0}
+                    max={99}
+                    placeholder={hour}
+                    value={hour}
+                    onChange={this.onInputChange}
+                    onTouchMove={this.onTouchMove}
+                    onWheel={this.onWheelEvent}
+                    disabled={this.state.status.hasStarted}
+                  />
                 </div>
-              ) : null}
-            </div>
-            <div className="row justify-content-center">
-              <div className="col-3 input-group" >
-                <input
-                  name="hour"
-                  type="number"
-                  className="form-control bg-secondary text-white"
-                  min={0}
-                  max={99}
-                  placeholder={hour}
-                  value={hour}
-                  onChange={this.onInputChange}
-                  onTouchMove={this.onTouchMove}
-                  onWheel={this.onWheelEvent}
-                  disabled={this.state.status.hasStarted}
-                />
-              </div>
-              <div className="col-3 input-group">
-                <input
-                  name="minute"
-                  type="number"
-                  className="form-control bg-secondary text-white"
-                  min={0}
-                  max={59}
-                  placeholder={minute}
-                  value={minute}
-                  onChange={this.onInputChange}
-                  onTouchMove={this.onTouchMove}
-                  onWheel={this.onWheelEvent}
-                  disabled={this.state.status.hasStarted}
-                />
-              </div>
-              <div className="col-3 input-group">
-                <input
-                  name="second"
-                  type="number"
-                  className="form-control bg-secondary text-white"
-                  min={0}
-                  max={59}
-                  placeholder={second}
-                  value={second}
-                  onChange={this.onInputChange}
-                  onTouchMove={this.onTouchMove}
-                  onWheel={this.onWheelEvent}
-                  disabled={this.state.status.hasStarted}
-                />
+                <div className="col-3 input-group">
+                  <input
+                    name="minute"
+                    type="number"
+                    className="form-control bg-secondary text-white"
+                    min={0}
+                    max={59}
+                    placeholder={minute}
+                    value={minute}
+                    onChange={this.onInputChange}
+                    onTouchMove={this.onTouchMove}
+                    onWheel={this.onWheelEvent}
+                    disabled={this.state.status.hasStarted}
+                  />
+                </div>
+                <div className="col-3 input-group">
+                  <input
+                    name="second"
+                    type="number"
+                    className="form-control bg-secondary text-white"
+                    min={0}
+                    max={59}
+                    placeholder={second}
+                    value={second}
+                    onChange={this.onInputChange}
+                    onTouchMove={this.onTouchMove}
+                    onWheel={this.onWheelEvent}
+                    disabled={this.state.status.hasStarted}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="card-body">
-            <div className="row justify-content-center px-3">
-              <div className=" btn-group">
-                <button
-                  className="btn btn-secondary"
-                  onClick={this.onStartClick}
-                  disabled={this.state.status.hasStarted}
-                >
-                  Start
-                </button>
-                <button
-                  className="btn btn-secondary"
-                  onClick={this.onPauseClick}
-                  disabled={!this.state.status.hasStarted}
-                >
-                  {this.state.status.isPaused ? "Resume" : "Pause"}
-                </button>
-                <button
-                  className="btn btn-secondary"
-                  onClick={this.onResetClick}
-                  disabled={!this.state.status.hasStarted}
-                >
-                  Reset
-                </button>
+            <div className="card-body">
+              <div className="row justify-content-center px-3">
+                <div className="col-sm-12 col-md-8 col-lg-6 row justify-content-between">
+                  <data
+                    value="10"
+                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                    onClick={this.onAddTimeClick}
+                  >
+                    + 10 sec
+                  </data>
+                  <data
+                    value="30"
+                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                    onClick={this.onAddTimeClick}
+                  >
+                    + 30 sec
+                  </data>
+                  <data
+                    value="60"
+                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                    onClick={this.onAddTimeClick}
+                  >
+                    + 1 min
+                  </data>
+                  <data
+                    value="120"
+                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                    onClick={this.onAddTimeClick}
+                  >
+                    + 2 min
+                  </data>
+                  <data
+                    value="300"
+                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                    onClick={this.onAddTimeClick}
+                  >
+                    + 5 min
+                  </data>
+                  <data
+                    value="600"
+                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                    onClick={this.onAddTimeClick}
+                  >
+                    + 10 min
+                  </data>
+                  <data
+                    value="1800"
+                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                    onClick={this.onAddTimeClick}
+                  >
+                    + 30 min
+                  </data>
+                  <data
+                    value="3600"
+                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                    onClick={this.onAddTimeClick}
+                  >
+                    + 1 hr
+                  </data>
+                </div>
+              </div>
+            </div>
+            <div className="card-body">
+              <div className="row justify-content-center px-3">
+                <div className=" btn-group">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={this.onStartClick}
+                    disabled={this.state.status.hasStarted}
+                  >
+                    Start
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={this.onPauseClick}
+                    disabled={!this.state.status.hasStarted}
+                  >
+                    {this.state.status.isPaused ? "Resume" : "Pause"}
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={this.onResetClick}
+                    disabled={!this.state.status.hasStarted}
+                  >
+                    Reset
+                  </button>
+                </div>
               </div>
             </div>
           </div>
