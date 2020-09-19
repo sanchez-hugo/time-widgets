@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-
-const SECONDS_IN_HOURS = 60 * 60;
-const SECONDS_IN_MINUTES = 60;
+import {
+  convertTimeToSeconds,
+  convertSecondsToTime,
+} from "../services/utilityService";
 
 class Timer extends Component {
   constructor(props) {
@@ -34,18 +35,6 @@ class Timer extends Component {
 
   //#region Timer
   /* Start */
-  onStartClick = () => {
-    const { time } = this.state;
-    const remaindingSeconds = this.convertTimeToSeconds(time);
-
-    if (remaindingSeconds > 0) {
-      this.setStartTime(time);
-      this.setIsComplete(false);
-      this.setHasStarted(true);
-      this.startTimer(remaindingSeconds - 1);
-    }
-  };
-
   startTimer = (remaindingSeconds) => {
     this.setState(
       (prevState) => ({ ...prevState, remaindingSeconds }),
@@ -57,6 +46,49 @@ class Timer extends Component {
   };
 
   /* Update */
+  updateTimer = () => {
+    const { remaindingSeconds } = this.state;
+    if (remaindingSeconds > 0) {
+      const time = convertSecondsToTime(remaindingSeconds);
+      this.setTime(time);
+      this.setRemainingSeconds(remaindingSeconds - 1);
+    } else {
+      this.resetTimer();
+      this.setIsComplete(true);
+    }
+  };
+
+  addTime = (addedSeconds) => {
+    const { remaindingSeconds } = this.state;
+    if (remaindingSeconds > 0) {
+      let totalSeconds = remaindingSeconds + addedSeconds;
+      const time = convertSecondsToTime(totalSeconds);
+      this.setTime(time);
+      if (this.state.status.hasStarted) totalSeconds--;
+      this.setRemainingSeconds(totalSeconds);
+    }
+  };
+
+  /* Pause */
+  pauseTimer = () => {
+    clearInterval(this.state.timerId);
+    this.setIsPaused(true);
+  };
+
+  resumeTimer = () => {
+    this.setIsPaused(false);
+    this.startTimer(this.state.remaindingSeconds);
+  };
+
+  /* Reset */
+
+  resetTimer = () => {
+    clearInterval(this.state.timerId);
+    this.resetState();
+  };
+  //#endregion
+
+  //#region Event Handlers
   onInputChange = (e) => {
     const { target } = e;
     const { name, value } = target;
@@ -67,12 +99,46 @@ class Timer extends Component {
     this.setTime(time);
   };
 
+  onStartClick = () => {
+    const { time } = this.state;
+    const remaindingSeconds = convertTimeToSeconds(time);
+
+    if (remaindingSeconds > 0) {
+      const status = {...this.state.status};
+      status.isComplete = false;
+      status.hasStarted = true;
+
+      this.setStatus(status);
+      this.setStartTime(time);
+      this.startTimer(remaindingSeconds - 1);
+    }
+  };
+
+  onPauseClick = () => {
+    if (this.state.status.isPaused) this.resumeTimer();
+    else this.pauseTimer();
+  };
+
+  onAddTimeClick = (e) => {
+    const event = e;
+    const { value } = event.target;
+    const addedSeconds = Number(value);
+
+    this.addTime(addedSeconds);
+  };
+
+  onResetClick = () => {
+    this.resetTimer();
+  };
+
   onWheelEvent = () => {
     // Allows for wheel to control number input
   };
 
   onTouchMove = (e) => {
     const event = e;
+
+    if (this.state.status.hasStarted) return;
 
     const { name } = event.target;
     const { clientY } = event.changedTouches[0];
@@ -92,65 +158,9 @@ class Timer extends Component {
 
     this.setY(name, clientY);
   };
+  //#endregion
 
-  updateTimer = () => {
-    const { remaindingSeconds } = this.state;
-    if (remaindingSeconds > 0) {
-      const time = this.convertSecondsToTime(remaindingSeconds);
-      this.setTime(time);
-      this.setRemainingSeconds(remaindingSeconds - 1);
-    } else {
-      this.resetTimer();
-      this.setIsComplete(true);
-    }
-  };
-
-  onPauseClick = () => {
-    if (this.state.status.isPaused) this.resumeTimer();
-    else this.pauseTimer();
-  };
-
-  pauseTimer = () => {
-    clearInterval(this.state.timerId);
-    this.setIsPaused(true);
-  };
-
-  resumeTimer = () => {
-    this.setIsPaused(false);
-    this.startTimer(this.state.remaindingSeconds);
-  };
-
-  onAddTimeClick = (e) => {
-    const event = e;
-    const { value } = event.target;
-    const addedSeconds = Number(value);
-
-    this.addTime(addedSeconds);
-  };
-
-  addTime = (addedSeconds) => {
-    const { remaindingSeconds } = this.state;
-    if (remaindingSeconds > 0) {
-      let totalSeconds = remaindingSeconds + addedSeconds;
-      const time = this.convertSecondsToTime(totalSeconds);
-      this.setTime(time);
-      if (this.state.status.hasStarted) totalSeconds--;
-      this.setRemainingSeconds(totalSeconds);
-    }
-  };
-
-  /* Reset */
-  onResetClick = () => {
-    this.resetTimer();
-  };
-
-  resetTimer = () => {
-    clearInterval(this.state.timerId);
-    this.resetState();
-  };
-
-  /* State */
-
+  //#region State
   setTime = (time) => {
     this.setState((prevState) => ({ ...prevState, time }));
   };
@@ -188,6 +198,13 @@ class Timer extends Component {
     }));
   };
 
+  setStatus = (status) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      status,
+    }));
+  };
+
   setY = (name, value) => {
     const touch = this.state.touch;
     touch[name] = value;
@@ -215,64 +232,13 @@ class Timer extends Component {
   };
   //#endregion
 
-  //#region Time String
-  buildTimeString = (hour, minute, second) => {
-    return `${this.converToTimeDisplay(hour)} : ${this.converToTimeDisplay(
-      minute
-    )} : ${this.converToTimeDisplay(second)}`;
-  };
-
-  converToTimeDisplay = (num) => {
-    let numString = num.toString();
-    if (num < 10) numString = `0${numString}`;
-    return numString;
-  };
-
-  getTimeString = (seconds) => {
-    const time = this.convertSecondsToTime(seconds);
-    const { hour, minute, second } = time;
-    return this.buildTimeString(hour, minute, second);
-  };
-  //#endregion
-
-  //#region Time Math
-  convertTimeToSeconds = (time) => {
-    const { hour, minute, second } = time;
-    const total =
-      hour * SECONDS_IN_HOURS + minute * SECONDS_IN_MINUTES + second;
-    return total;
-  };
-
-  convertSecondsToTime = (seconds) => {
-    const hour = this.getHours(seconds);
-    seconds = seconds - hour * SECONDS_IN_HOURS;
-
-    const minute = this.getMinutes(seconds);
-    seconds = seconds - minute * SECONDS_IN_MINUTES;
-
-    const second = seconds;
-
-    const time = {
-      hour,
-      minute,
-      second,
-    };
-
-    return time;
-  };
-
-  getHours = (seconds) => Math.floor(seconds / SECONDS_IN_HOURS);
-
-  getMinutes = (seconds) => Math.floor(seconds / SECONDS_IN_MINUTES);
-  //#endregion
-
   render() {
     const { hour, minute, second } = this.state.time;
 
     return (
       <div className="container-fluid p-3">
         <div className="row justify-content-center px-md-5">
-          <div className="col-md-8 card bg-dark text-white">
+          <div className="col-md-6 card bg-dark text-white">
             <div className="card-header text-center">
               <h3 className="card-title font-weight-light">Timer</h3>
             </div>
