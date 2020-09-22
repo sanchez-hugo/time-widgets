@@ -1,6 +1,11 @@
 const SECONDS_IN_MINUTES = 60;
 const SECONDS_IN_HOURS = 3600;
 
+const MS_IN_SECONDS = 1000;
+
+const MS_IN_MINUTES = SECONDS_IN_MINUTES * MS_IN_SECONDS;
+const MS_IN_HOURS = SECONDS_IN_HOURS * MS_IN_SECONDS;
+
 //#region Time String
 const buildTimeString = (hour, minute, second) => {
   return `${convertToTimeDisplay(hour)} h ${convertToTimeDisplay(
@@ -23,18 +28,32 @@ const getTimeString = (seconds) => {
 //#endregion
 
 //#region Time Math
+
+// --- Seconds ---
+const extractHoursFromSeconds = (seconds) =>
+  Math.floor(seconds / SECONDS_IN_HOURS);
+const extractMinutesFromSeconds = (seconds) =>
+  Math.floor(seconds / SECONDS_IN_MINUTES);
+
+const getHoursInSeconds = (seconds) => seconds * SECONDS_IN_HOURS;
+const getMinutesInSeconds = (seconds) => seconds * SECONDS_IN_MINUTES;
+
 const convertTimeToSeconds = (time) => {
   const { hour, minute, second } = time;
-  const total = hour * SECONDS_IN_HOURS + minute * SECONDS_IN_MINUTES + second;
-  return total;
+
+  const hourSeconds = getHoursInSeconds(hour);
+  const minuteSeconds = getMinutesInSeconds(minute);
+
+  const totalSeconds = hourSeconds + minuteSeconds + second;
+  return totalSeconds;
 };
 
 const convertSecondsToTime = (seconds) => {
-  const hour = getHours(seconds);
-  seconds = seconds - hour * SECONDS_IN_HOURS;
+  const hour = extractHoursFromSeconds(seconds);
+  seconds = seconds - getHoursInSeconds(hour);
 
-  const minute = getMinutes(seconds);
-  seconds = seconds - minute * SECONDS_IN_MINUTES;
+  const minute = extractMinutesFromSeconds(seconds);
+  seconds = seconds - getMinutesInSeconds(minute);
 
   const second = seconds;
 
@@ -47,9 +66,52 @@ const convertSecondsToTime = (seconds) => {
   return time;
 };
 
-const getHours = (seconds) => Math.floor(seconds / SECONDS_IN_HOURS);
+// --- Milliseconds ---
+const extractHoursFromMilseconds = (milseconds) =>
+  Math.floor(milseconds / MS_IN_HOURS);
+const extractMinutesFromMilseconds = (milseconds) =>
+  Math.floor(milseconds / MS_IN_MINUTES);
+const extractSecondsFromMilseconds = (milseconds) =>
+  Math.floor(milseconds / MS_IN_SECONDS);
 
-const getMinutes = (seconds) => Math.floor(seconds / SECONDS_IN_MINUTES);
+const getHoursInMilseconds = (milseconds) => milseconds * MS_IN_HOURS;
+const getMinutesInMilseconds = (milseconds) => milseconds * MS_IN_MINUTES;
+const getSecondsInMilseconds = (milseconds) => milseconds * MS_IN_SECONDS;
+
+const convertTimeToMilliseconds = (time) => {
+  const { hour, minute, second, milsecond } = time;
+
+  const hourMilseconds = getHoursInMilseconds(hour);
+  const minuteMilseconds = getMinutesInMilseconds(minute);
+  const secondMilseconds = getSecondsInMilseconds(second);
+
+  const totalMilseconds =
+    hourMilseconds + minuteMilseconds + secondMilseconds + milsecond;
+  return totalMilseconds;
+};
+
+const convertMilsecondsToTime = (milseconds) => {
+  const hour = extractHoursFromMilseconds(milseconds);
+  milseconds = milseconds - getHoursInMilseconds(hour);
+
+  const minute = extractMinutesFromMilseconds(milseconds);
+  milseconds = milseconds - getMinutesInMilseconds(minute);
+
+  const second = extractSecondsFromMilseconds(milseconds);
+  milseconds = milseconds - getSecondsInMilseconds(second);
+
+  const milsecond = milseconds;
+
+  const time = {
+    hour,
+    minute,
+    second,
+    milsecond,
+  };
+
+  return time;
+};
+
 //#endregion
 
 export {
@@ -57,7 +119,17 @@ export {
   convertToTimeDisplay,
   getTimeString,
   convertTimeToSeconds,
+  convertTimeToMilliseconds,
   convertSecondsToTime,
-  getHours,
-  getMinutes
+  convertMilsecondsToTime,
+  extractHoursFromSeconds,
+  extractMinutesFromSeconds,
+  extractHoursFromMilseconds,
+  extractMinutesFromMilseconds,
+  extractSecondsFromMilseconds,
+  getHoursInSeconds,
+  getMinutesInSeconds,
+  getHoursInMilseconds,
+  getMinutesInMilseconds,
+  getSecondsInMilseconds,
 };
