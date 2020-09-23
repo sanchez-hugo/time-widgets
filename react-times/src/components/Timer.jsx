@@ -33,6 +33,10 @@ class Timer extends Component {
     };
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.timerId);
+  }
+
   //#region Timer
   /* Start */
   startTimer = (remaindingSeconds) => {
@@ -104,7 +108,7 @@ class Timer extends Component {
     const remaindingSeconds = convertTimeToSeconds(time);
 
     if (remaindingSeconds > 0) {
-      const status = {...this.state.status};
+      const status = { ...this.state.status };
       status.isComplete = false;
       status.hasStarted = true;
 
@@ -254,7 +258,7 @@ class Timer extends Component {
                 ) : null}
               </div>
               <div className="row justify-content-center">
-                <div className="col-3 input-group">
+                <div className="col-4 input-group input-group-sm">
                   <input
                     name="hour"
                     type="number"
@@ -268,8 +272,11 @@ class Timer extends Component {
                     onWheel={this.onWheelEvent}
                     disabled={this.state.status.hasStarted}
                   />
+                  <div className="input-group-append">
+                    <span className="input-group-text">hr</span>
+                  </div>
                 </div>
-                <div className="col-3 input-group">
+                <div className="col-4 input-group input-group-sm">
                   <input
                     name="minute"
                     type="number"
@@ -283,8 +290,11 @@ class Timer extends Component {
                     onWheel={this.onWheelEvent}
                     disabled={this.state.status.hasStarted}
                   />
+                  <div className="input-group-append">
+                    <span className="input-group-text">m</span>
+                  </div>
                 </div>
-                <div className="col-3 input-group">
+                <div className="col-4 input-group input-group-sm">
                   <input
                     name="second"
                     type="number"
@@ -298,12 +308,15 @@ class Timer extends Component {
                     onWheel={this.onWheelEvent}
                     disabled={this.state.status.hasStarted}
                   />
+                  <div className="input-group-append">
+                    <span className="input-group-text">s</span>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="card-body">
               <div className="row justify-content-center px-3">
-                <div className="col-sm-12 col-md-8 col-lg-6 row justify-content-between">
+                <div className="col-sm-12 col-md-10 row justify-content-between">
                   <data
                     value="10"
                     className="badge btn btn-small btn-link badge-pill badge-info m-1"

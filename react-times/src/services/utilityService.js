@@ -7,22 +7,70 @@ const MS_IN_MINUTES = SECONDS_IN_MINUTES * MS_IN_SECONDS;
 const MS_IN_HOURS = SECONDS_IN_HOURS * MS_IN_SECONDS;
 
 //#region Time String
-const buildTimeString = (hour, minute, second) => {
+const convertToTimeDisplay = (num) => {
+  let numString = num.toString();
+  if (num < 10 && num !== 0) numString = `0${numString}`;
+  return numString;
+};
+
+const buildTimeString = (time) => {
+  const { hour, minute, second } = time;
   return `${convertToTimeDisplay(hour)} h ${convertToTimeDisplay(
     minute
   )} m ${convertToTimeDisplay(second)} s`;
 };
 
-const convertToTimeDisplay = (num) => {
-  let numString = num.toString();
-  if (num < 10) numString = `0${numString}`;
-  return numString;
-};
-
 const getTimeString = (seconds) => {
   const time = convertSecondsToTime(seconds);
-  const { hour, minute, second } = time;
-  return buildTimeString(hour, minute, second);
+
+  return buildTimeString(time);
+};
+
+const buildTimeStringV2 = (time) => {
+  const totalMilseconds = convertTimeToMilliseconds(time);
+  const { hour, minute, second, milsecond } = time;
+
+  let timeString = "";
+
+  if (totalMilseconds > MS_IN_MINUTES)
+    timeString = `${convertToTimeDisplay(hour)} hr : ${convertToTimeDisplay(
+      minute
+    )} m : ${convertToTimeDisplay(second)} s : ${convertToTimeDisplay(
+      milsecond / 10
+    )} ms`;
+  else if (totalMilseconds > MS_IN_SECONDS)
+    timeString = `${convertToTimeDisplay(minute)} m : ${convertToTimeDisplay(
+      second
+    )} s : ${convertToTimeDisplay(milsecond / 10)} ms`;
+  else
+    timeString = `${convertToTimeDisplay(second)} s : ${convertToTimeDisplay(
+      milsecond / 10
+    )} ms`;
+
+  /* // Method 2 omits zeroes
+
+  let timeString = "";
+  if (milsecond > 0) timeString = `${convertToTimeDisplay(milsecond)} ms`;
+  if (second > 0) timeString = `${convertToTimeDisplay(second)} s ${timeString}`;
+  if (minute > 0) timeString = `${convertToTimeDisplay(minute)} m ${timeString}`;
+  if (hour > 0) timeString = `${convertToTimeDisplay(hour)} hr ${timeString}`;
+  */
+
+  /* // Method 3 Inlcudes zeroes 
+
+  const timeString = `${convertToTimeDisplay(hour)} hr : ${convertToTimeDisplay(
+    minute
+  )} m : ${convertToTimeDisplay(second)} s : ${convertToTimeDisplay(
+    milsecond
+  )} ms`;
+  */
+  return timeString;
+};
+
+const getTimeStringV2 = (milseconds) => {
+  const time = convertMilsecondsToTime(milseconds);
+
+  return buildTimeStringV2(time);
 };
 
 //#endregion
@@ -132,4 +180,6 @@ export {
   getHoursInMilseconds,
   getMinutesInMilseconds,
   getSecondsInMilseconds,
+  buildTimeStringV2,
+  getTimeStringV2,
 };

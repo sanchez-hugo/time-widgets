@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import {
-  convertSecondsToTime,
-  getTimeString,
+  convertMilsecondsToTime,
+  getTimeStringV2,
 } from "../services/utilityService";
 
 class Stopwatch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      elapsedSeconds: 0,
       time: {
         hour: 0,
         minute: 0,
@@ -19,53 +18,34 @@ class Stopwatch extends Component {
         isPaused: false,
         hasStarted: false,
       },
+      elapsedMilseconds: 0,
+      stopwatchId: 0,
       splits: [],
       mappedSplits: [],
-      stopwatchId: 0,
-      milsecond: {
-        intervalId: 0,
-        current: 0,
-      },
     };
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.state.stopwatchId);
   }
 
   //#region Stopwatch
   startStopwatch = () => {
-    const milsecondId = setInterval(this.updateMilSecond, 10);
-    const stopwatchId = setInterval(this.updateStopwatch, 1000);
-
-    const { milsecond } = this.state;
-    milsecond.intervalId = milsecondId;
+    const stopwatchId = setInterval(this.updateStopwatch, 10);
 
     this.setStopwatchId(stopwatchId);
-    this.setState((prevState) => ({ ...prevState, milsecond }));
-  };
-
-  updateMilSecond = () => {
-    const { milsecond } = this.state;
-
-    if (milsecond.current >= 99) milsecond.current = 0;
-    else milsecond.current += 1;
-
-    this.setState(
-      (prevState) => ({ ...prevState, milsecond }),
-      () => {
-        if (milsecond.current === 0)
-          console.log(milsecond.current, this.state.time);
-      }
-    );
   };
 
   updateStopwatch = () => {
-    const { elapsedSeconds } = this.state;
-    this.setElapsedSeconds(elapsedSeconds + 1);
-    const time = convertSecondsToTime(elapsedSeconds + 1);
+    const { elapsedMilseconds } = this.state;
+    this.setElapsedMilseconds(elapsedMilseconds + 10);
+    const time = convertMilsecondsToTime(elapsedMilseconds + 10);
     this.setTime(time);
   };
 
   splitStopwatch = () => {
-    const { elapsedSeconds, splits } = this.state;
-    const splitString = getTimeString(elapsedSeconds);
+    const { elapsedMilseconds, splits } = this.state;
+    const splitString = getTimeStringV2(elapsedMilseconds);
     splits.push(splitString);
 
     const mappedSplits = splits.map(this.mapSplit);
@@ -75,7 +55,6 @@ class Stopwatch extends Component {
 
   pauseStopwatch = () => {
     clearInterval(this.state.stopwatchId);
-    clearInterval(this.state.milsecond.intervalId);
     this.setIsPaused(true);
   };
 
@@ -86,7 +65,6 @@ class Stopwatch extends Component {
 
   stopStopwatch = () => {
     clearInterval(this.state.stopwatchId);
-    clearInterval(this.state.milsecond.intervalId);
     this.resetState();
   };
 
@@ -125,8 +103,8 @@ class Stopwatch extends Component {
     this.setState((prevState) => ({ ...prevState, time }));
   };
 
-  setElapsedSeconds = (elapsedSeconds) => {
-    this.setState((prevState) => ({ ...prevState, elapsedSeconds }));
+  setElapsedMilseconds = (elapsedMilseconds) => {
+    this.setState((prevState) => ({ ...prevState, elapsedMilseconds }));
   };
 
   setStopwatchId = (stopwatchId) => {
@@ -159,11 +137,12 @@ class Stopwatch extends Component {
   };
 
   resetState = () => {
-    const elapsedSeconds = 0;
+    const elapsedMilseconds = 0;
     const time = {
       hour: 0,
       minute: 0,
       second: 0,
+      milsecond: 0,
     };
     const status = {
       isPaused: false,
@@ -172,27 +151,21 @@ class Stopwatch extends Component {
     const splits = [];
     const mappedSplits = [];
     const stopwatchId = 0;
-    const milsecond = {
-      intervalId: 0,
-      current: 0,
-    };
 
     this.setState((prevState) => ({
       ...prevState,
-      elapsedSeconds,
+      elapsedMilseconds,
       time,
       status,
       splits,
       mappedSplits,
       stopwatchId,
-      milsecond,
     }));
   };
   //#endregion
 
   render() {
-    const { hour, minute, second } = this.state.time;
-    const milsecond = this.state.milsecond.current;
+    const { hour, minute, second, milsecond } = this.state.time;
 
     return (
       <div className="container-fluid p-3">
@@ -257,7 +230,7 @@ class Stopwatch extends Component {
                     min={0}
                     max={999}
                     placeholder={0}
-                    value={milsecond}
+                    value={milsecond / 10}
                     disabled
                   />
                 </div>
