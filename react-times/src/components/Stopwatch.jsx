@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {
   convertMilsecondsToTime,
   getTimeStringV2,
-} from "../services/utilityService";
+} from "../services/timeService";
 
 class Stopwatch extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class Stopwatch extends Component {
     };
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     clearInterval(this.state.stopwatchId);
   }
 
@@ -239,31 +239,32 @@ class Stopwatch extends Component {
             <div className="card-body">
               <div className="row justify-content-center px-3">
                 <div className=" btn-group">
-                  <button
-                    className="btn btn-secondary"
-                    onClick={this.onStartClick}
-                    disabled={this.state.status.hasStarted}
-                  >
-                    Start
-                  </button>
                   {this.state.status.hasStarted ? (
                     <button
-                      className="btn btn-secondary"
+                      className="btn btn-primary"
                       onClick={this.onSplitClick}
                       //   disabled={this.state.status.isPaused}
                     >
                       Split
                     </button>
-                  ) : null}
+                  ) : (
+                    <button
+                      className="btn btn-success"
+                      onClick={this.onStartClick}
+                      disabled={this.state.status.hasStarted}
+                    >
+                      Start
+                    </button>
+                  )}
                   <button
-                    className="btn btn-secondary"
+                    className="btn btn-warning"
                     onClick={this.onPauseClick}
                     disabled={!this.state.status.hasStarted}
                   >
                     {this.state.status.isPaused ? "Resume" : "Pause"}
                   </button>
                   <button
-                    className="btn btn-secondary"
+                    className="btn btn-danger"
                     onClick={this.onStopClick}
                     disabled={!this.state.status.hasStarted}
                   >

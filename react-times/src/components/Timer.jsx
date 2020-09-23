@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {
   convertTimeToSeconds,
   convertSecondsToTime,
-} from "../services/utilityService";
+} from "../services/timeService";
 
 class Timer extends Component {
   constructor(props) {
@@ -94,13 +94,17 @@ class Timer extends Component {
 
   //#region Event Handlers
   onInputChange = (e) => {
-    const { target } = e;
-    const { name, value } = target;
+    const event = e;
+    const { name, value } = event.target;
 
-    const time = { ...this.state.time };
-    time[name] = Number(value);
+    if (!this.state.status.hasStarted) {
+      const time = { ...this.state.time };
+      time[name] = Number(value);
+      const remaindingSeconds = convertTimeToSeconds(time);
 
-    this.setTime(time);
+      this.setTime(time);
+      this.setRemainingSeconds(remaindingSeconds);
+    }
   };
 
   onStartClick = () => {
@@ -218,7 +222,7 @@ class Timer extends Component {
 
   resetState = () => {
     const time = this.state.startTime;
-    const remaindingSeconds = 120;
+    const remaindingSeconds = this.state.remaindingSeconds;
     const timerId = 0;
     const status = {
       isPaused: false,
@@ -258,7 +262,7 @@ class Timer extends Component {
                 ) : null}
               </div>
               <div className="row justify-content-center">
-                <div className="col-4 input-group input-group-sm">
+                <div className="col-4 input-group">
                   <input
                     name="hour"
                     type="number"
@@ -276,7 +280,7 @@ class Timer extends Component {
                     <span className="input-group-text">hr</span>
                   </div>
                 </div>
-                <div className="col-4 input-group input-group-sm">
+                <div className="col-4 input-group">
                   <input
                     name="minute"
                     type="number"
@@ -294,7 +298,7 @@ class Timer extends Component {
                     <span className="input-group-text">m</span>
                   </div>
                 </div>
-                <div className="col-4 input-group input-group-sm">
+                <div className="col-4 input-group">
                   <input
                     name="second"
                     type="number"
@@ -380,21 +384,21 @@ class Timer extends Component {
               <div className="row justify-content-center px-3">
                 <div className=" btn-group">
                   <button
-                    className="btn btn-secondary"
+                    className="btn btn-success"
                     onClick={this.onStartClick}
                     disabled={this.state.status.hasStarted}
                   >
                     Start
                   </button>
                   <button
-                    className="btn btn-secondary"
+                    className="btn btn-warning"
                     onClick={this.onPauseClick}
                     disabled={!this.state.status.hasStarted}
                   >
                     {this.state.status.isPaused ? "Resume" : "Pause"}
                   </button>
                   <button
-                    className="btn btn-secondary"
+                    className="btn btn-danger"
                     onClick={this.onResetClick}
                     disabled={!this.state.status.hasStarted}
                   >
