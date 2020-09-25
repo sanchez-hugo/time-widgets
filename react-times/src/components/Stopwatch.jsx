@@ -170,114 +170,116 @@ class Stopwatch extends Component {
     return (
       <div className="container-fluid p-3">
         <div className="row justify-content-center px-md-5">
-          <div className="col-md-6 card bg-dark text-white">
-            <div className="card-header text-center">
-              <h3 className="card-title font-weight-light">Stopwatch</h3>
-            </div>
-            <div className="card-body">
-              <div className="row justify-content-center">
-                {this.state.status.isComplete ? (
-                  <div
-                    className="alert alert-success w-75 text-center"
-                    role="alert"
-                  >
-                    Time's up!
+          <div className="col-md-6">
+            <div className="card bg-dark text-white">
+              <div className="card-header text-center">
+                <h3 className="card-title font-weight-light">Stopwatch</h3>
+              </div>
+              <div className="card-body">
+                <div className="row justify-content-center">
+                  {this.state.status.isComplete ? (
+                    <div
+                      className="alert alert-success w-75 text-center"
+                      role="alert"
+                    >
+                      Time's up!
+                    </div>
+                  ) : null}
+                </div>
+                <div className="row justify-content-center">
+                  <div className="col-3 input-group">
+                    <input
+                      name="hour"
+                      type="number"
+                      className="form-control bg-secondary text-white"
+                      min={0}
+                      max={99}
+                      placeholder={0}
+                      value={hour}
+                      disabled
+                    />
                   </div>
-                ) : null}
-              </div>
-              <div className="row justify-content-center">
-                <div className="col-3 input-group">
-                  <input
-                    name="hour"
-                    type="number"
-                    className="form-control bg-secondary text-white"
-                    min={0}
-                    max={99}
-                    placeholder={0}
-                    value={hour}
-                    disabled
-                  />
-                </div>
-                <div className="col-3 input-group">
-                  <input
-                    name="minute"
-                    type="number"
-                    className="form-control bg-secondary text-white"
-                    min={0}
-                    max={59}
-                    placeholder={0}
-                    value={minute}
-                    disabled
-                  />
-                </div>
-                <div className="col-3 input-group">
-                  <input
-                    name="second"
-                    type="number"
-                    className="form-control bg-secondary text-white"
-                    min={0}
-                    max={59}
-                    placeholder={0}
-                    value={second}
-                    disabled
-                  />
-                </div>
-                <div className="col-3 input-group">
-                  <input
-                    name="milsecond"
-                    type="number"
-                    className="form-control bg-secondary text-white"
-                    min={0}
-                    max={999}
-                    placeholder={0}
-                    value={milsecond / 10}
-                    disabled
-                  />
+                  <div className="col-3 input-group">
+                    <input
+                      name="minute"
+                      type="number"
+                      className="form-control bg-secondary text-white"
+                      min={0}
+                      max={59}
+                      placeholder={0}
+                      value={minute}
+                      disabled
+                    />
+                  </div>
+                  <div className="col-3 input-group">
+                    <input
+                      name="second"
+                      type="number"
+                      className="form-control bg-secondary text-white"
+                      min={0}
+                      max={59}
+                      placeholder={0}
+                      value={second}
+                      disabled
+                    />
+                  </div>
+                  <div className="col-3 input-group">
+                    <input
+                      name="milsecond"
+                      type="number"
+                      className="form-control bg-secondary text-white"
+                      min={0}
+                      max={999}
+                      placeholder={0}
+                      value={milsecond / 10}
+                      disabled
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="card-body">
-              <div className="row justify-content-center px-3">
-                <div className=" btn-group">
-                  {this.state.status.hasStarted ? (
+              <div className="card-body">
+                <div className="row justify-content-center px-3">
+                  <div className=" btn-group">
+                    {this.state.status.hasStarted ? (
+                      <button
+                        className="btn btn-primary"
+                        onClick={this.onSplitClick}
+                        //   disabled={this.state.status.isPaused}
+                      >
+                        Split
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-success"
+                        onClick={this.onStartClick}
+                        disabled={this.state.status.hasStarted}
+                      >
+                        Start
+                      </button>
+                    )}
                     <button
-                      className="btn btn-primary"
-                      onClick={this.onSplitClick}
-                      //   disabled={this.state.status.isPaused}
+                      className="btn btn-warning"
+                      onClick={this.onPauseClick}
+                      disabled={!this.state.status.hasStarted}
                     >
-                      Split
+                      {this.state.status.isPaused ? "Resume" : "Pause"}
                     </button>
-                  ) : (
                     <button
-                      className="btn btn-success"
-                      onClick={this.onStartClick}
-                      disabled={this.state.status.hasStarted}
+                      className="btn btn-danger"
+                      onClick={this.onStopClick}
+                      disabled={!this.state.status.hasStarted}
                     >
-                      Start
+                      Stop
                     </button>
-                  )}
-                  <button
-                    className="btn btn-warning"
-                    onClick={this.onPauseClick}
-                    disabled={!this.state.status.hasStarted}
-                  >
-                    {this.state.status.isPaused ? "Resume" : "Pause"}
-                  </button>
-                  <button
-                    className="btn btn-danger"
-                    onClick={this.onStopClick}
-                    disabled={!this.state.status.hasStarted}
-                  >
-                    Stop
-                  </button>
+                  </div>
                 </div>
               </div>
+              {this.state.mappedSplits.length ? (
+                <ul className="list-group list-group-flush">
+                  {this.state.mappedSplits}
+                </ul>
+              ) : null}
             </div>
-            {this.state.mappedSplits.length ? (
-              <ul className="list-group list-group-flush">
-                {this.state.mappedSplits}
-              </ul>
-            ) : null}
           </div>
         </div>
       </div>

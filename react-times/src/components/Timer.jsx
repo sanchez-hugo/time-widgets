@@ -246,164 +246,166 @@ class Timer extends Component {
     return (
       <div className="container-fluid p-3">
         <div className="row justify-content-center px-md-5">
-          <div className="col-md-6 card bg-dark text-white">
-            <div className="card-header text-center">
-              <h3 className="card-title font-weight-light">Timer</h3>
-            </div>
-            <div className="card-body">
-              <div className="row justify-content-center">
-                {this.state.status.isComplete ? (
-                  <div
-                    className="alert alert-success w-75 text-center"
-                    role="alert"
-                  >
-                    Time's up!
-                  </div>
-                ) : null}
+          <div className="col-md-6">
+            <div className="card bg-dark text-white">
+              <div className="card-header text-center">
+                <h3 className="card-title font-weight-light">Timer</h3>
               </div>
-              <div className="row justify-content-center">
-                <div className="col-4 input-group">
-                  <input
-                    name="hour"
-                    type="number"
-                    className="form-control bg-secondary text-white"
-                    min={0}
-                    max={99}
-                    placeholder={hour}
-                    value={hour}
-                    onChange={this.onInputChange}
-                    onTouchMove={this.onTouchMove}
-                    onWheel={this.onWheelEvent}
-                    disabled={this.state.status.hasStarted}
-                  />
-                  <div className="input-group-append">
-                    <span className="input-group-text">hr</span>
-                  </div>
+              <div className="card-body">
+                <div className="row justify-content-center">
+                  {this.state.status.isComplete ? (
+                    <div
+                      className="alert alert-success w-75 text-center"
+                      role="alert"
+                    >
+                      Time's up!
+                    </div>
+                  ) : null}
                 </div>
-                <div className="col-4 input-group">
-                  <input
-                    name="minute"
-                    type="number"
-                    className="form-control bg-secondary text-white"
-                    min={0}
-                    max={59}
-                    placeholder={minute}
-                    value={minute}
-                    onChange={this.onInputChange}
-                    onTouchMove={this.onTouchMove}
-                    onWheel={this.onWheelEvent}
-                    disabled={this.state.status.hasStarted}
-                  />
-                  <div className="input-group-append">
-                    <span className="input-group-text">m</span>
+                <div className="row justify-content-center">
+                  <div className="col-4 input-group">
+                    <input
+                      name="hour"
+                      type="number"
+                      className="form-control bg-secondary text-white"
+                      min={0}
+                      max={99}
+                      placeholder={hour}
+                      value={hour}
+                      onChange={this.onInputChange}
+                      onTouchMove={this.onTouchMove}
+                      onWheel={this.onWheelEvent}
+                      disabled={this.state.status.hasStarted}
+                    />
+                    <div className="input-group-append">
+                      <span className="input-group-text">hr</span>
+                    </div>
                   </div>
-                </div>
-                <div className="col-4 input-group">
-                  <input
-                    name="second"
-                    type="number"
-                    className="form-control bg-secondary text-white"
-                    min={0}
-                    max={59}
-                    placeholder={second}
-                    value={second}
-                    onChange={this.onInputChange}
-                    onTouchMove={this.onTouchMove}
-                    onWheel={this.onWheelEvent}
-                    disabled={this.state.status.hasStarted}
-                  />
-                  <div className="input-group-append">
-                    <span className="input-group-text">s</span>
+                  <div className="col-4 input-group">
+                    <input
+                      name="minute"
+                      type="number"
+                      className="form-control bg-secondary text-white"
+                      min={0}
+                      max={59}
+                      placeholder={minute}
+                      value={minute}
+                      onChange={this.onInputChange}
+                      onTouchMove={this.onTouchMove}
+                      onWheel={this.onWheelEvent}
+                      disabled={this.state.status.hasStarted}
+                    />
+                    <div className="input-group-append">
+                      <span className="input-group-text">m</span>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className="card-body">
-              <div className="row justify-content-center px-3">
-                <div className="col-sm-12 col-md-10 row justify-content-between">
-                  <data
-                    value="10"
-                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
-                    onClick={this.onAddTimeClick}
-                  >
-                    + 10 sec
-                  </data>
-                  <data
-                    value="30"
-                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
-                    onClick={this.onAddTimeClick}
-                  >
-                    + 30 sec
-                  </data>
-                  <data
-                    value="60"
-                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
-                    onClick={this.onAddTimeClick}
-                  >
-                    + 1 min
-                  </data>
-                  <data
-                    value="120"
-                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
-                    onClick={this.onAddTimeClick}
-                  >
-                    + 2 min
-                  </data>
-                  <data
-                    value="300"
-                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
-                    onClick={this.onAddTimeClick}
-                  >
-                    + 5 min
-                  </data>
-                  <data
-                    value="600"
-                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
-                    onClick={this.onAddTimeClick}
-                  >
-                    + 10 min
-                  </data>
-                  <data
-                    value="1800"
-                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
-                    onClick={this.onAddTimeClick}
-                  >
-                    + 30 min
-                  </data>
-                  <data
-                    value="3600"
-                    className="badge btn btn-small btn-link badge-pill badge-info m-1"
-                    onClick={this.onAddTimeClick}
-                  >
-                    + 1 hr
-                  </data>
+                  <div className="col-4 input-group">
+                    <input
+                      name="second"
+                      type="number"
+                      className="form-control bg-secondary text-white"
+                      min={0}
+                      max={59}
+                      placeholder={second}
+                      value={second}
+                      onChange={this.onInputChange}
+                      onTouchMove={this.onTouchMove}
+                      onWheel={this.onWheelEvent}
+                      disabled={this.state.status.hasStarted}
+                    />
+                    <div className="input-group-append">
+                      <span className="input-group-text">s</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="card-body">
-              <div className="row justify-content-center px-3">
-                <div className=" btn-group">
-                  <button
-                    className="btn btn-success"
-                    onClick={this.onStartClick}
-                    disabled={this.state.status.hasStarted}
-                  >
-                    Start
-                  </button>
-                  <button
-                    className="btn btn-warning"
-                    onClick={this.onPauseClick}
-                    disabled={!this.state.status.hasStarted}
-                  >
-                    {this.state.status.isPaused ? "Resume" : "Pause"}
-                  </button>
-                  <button
-                    className="btn btn-danger"
-                    onClick={this.onResetClick}
-                    disabled={!this.state.status.hasStarted}
-                  >
-                    Reset
-                  </button>
+              <div className="card-body">
+                <div className="row justify-content-center px-3">
+                  <div className="col-sm-12 col-md-10 row justify-content-between">
+                    <data
+                      value="10"
+                      className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                      onClick={this.onAddTimeClick}
+                    >
+                      + 10 sec
+                    </data>
+                    <data
+                      value="30"
+                      className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                      onClick={this.onAddTimeClick}
+                    >
+                      + 30 sec
+                    </data>
+                    <data
+                      value="60"
+                      className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                      onClick={this.onAddTimeClick}
+                    >
+                      + 1 min
+                    </data>
+                    <data
+                      value="120"
+                      className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                      onClick={this.onAddTimeClick}
+                    >
+                      + 2 min
+                    </data>
+                    <data
+                      value="300"
+                      className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                      onClick={this.onAddTimeClick}
+                    >
+                      + 5 min
+                    </data>
+                    <data
+                      value="600"
+                      className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                      onClick={this.onAddTimeClick}
+                    >
+                      + 10 min
+                    </data>
+                    <data
+                      value="1800"
+                      className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                      onClick={this.onAddTimeClick}
+                    >
+                      + 30 min
+                    </data>
+                    <data
+                      value="3600"
+                      className="badge btn btn-small btn-link badge-pill badge-info m-1"
+                      onClick={this.onAddTimeClick}
+                    >
+                      + 1 hr
+                    </data>
+                  </div>
+                </div>
+              </div>
+              <div className="card-body">
+                <div className="row justify-content-center px-3">
+                  <div className=" btn-group">
+                    <button
+                      className="btn btn-success"
+                      onClick={this.onStartClick}
+                      disabled={this.state.status.hasStarted}
+                    >
+                      Start
+                    </button>
+                    <button
+                      className="btn btn-warning"
+                      onClick={this.onPauseClick}
+                      disabled={!this.state.status.hasStarted}
+                    >
+                      {this.state.status.isPaused ? "Resume" : "Pause"}
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={this.onResetClick}
+                      disabled={!this.state.status.hasStarted}
+                    >
+                      Reset
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

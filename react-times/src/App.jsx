@@ -18,7 +18,7 @@ class App extends Component {
 
     return (
         <BrowserRouter>
-          <div className="container-fluid text-white">
+          <div className="container-fluid">
             <NavBar/>
             <div>
               <hr className="bg-white"/>
