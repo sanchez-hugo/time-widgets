@@ -1,4 +1,8 @@
-## Time Widgets: Timer, Stopwatch, Clock
+## Time Widgets
+
+Simple time widgets including: a timer, stopwatch, and a clock.
+
+Built with [React](https://reactjs.org/) and [Bootstrap 4.5](https://getbootstrap.com/docs/4.5/getting-started/introduction/) for styling.
 
 ---
 
