@@ -20,3 +20,5 @@ Built with [React](https://reactjs.org/) and [Bootstrap 4.5](https://getbootstra
 ---
 
 ### Clock
+
+![Clock Screenshot](/assets/img/screenshots/clock-screenshot-01.png "Clock Screenshot")

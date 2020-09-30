@@ -34,7 +34,7 @@ class Timer extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.timerId);
+    if (this.state.timerId) clearInterval(this.state.timerId);
   }
 
   //#region Timer

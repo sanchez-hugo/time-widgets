@@ -26,7 +26,7 @@ class Stopwatch extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.stopwatchId);
+    if (this.state.stopwatchId) clearInterval(this.state.stopwatchId);
   }
 
   //#region Stopwatch
