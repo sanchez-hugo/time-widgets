@@ -1,0 +1,4 @@
+const BACKGROUND_COLOR = "#292b2c";
+const NIGHTMODE_COLOR = "#1e1e1e";
+
+export { BACKGROUND_COLOR, NIGHTMODE_COLOR };

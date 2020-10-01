@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { BACKGROUND_COLOR, NIGHTMODE_COLOR } from "../services/colorService";
 
 class Clock extends PureComponent {
   constructor(props) {
@@ -8,6 +9,7 @@ class Clock extends PureComponent {
       timeString: "",
       dateString: "",
       clockIntervalId: 0,
+      isNightModeOn: false,
     };
   }
 
@@ -22,6 +24,9 @@ class Clock extends PureComponent {
 
   componentWillUnmount() {
     if (this.state.clockIntervalId) clearInterval(this.state.clockIntervalId);
+    // BACKGROUND_COLOR === rgb(41,43,44)
+    if (document.body.style.backgroundColor !== "rgb(41,43,44)")
+      document.body.style.backgroundColor = BACKGROUND_COLOR;
   }
 
   updateClock = () => {
@@ -51,30 +56,90 @@ class Clock extends PureComponent {
     return { dateString, timeString, today };
   }
 
+  onNightModeClick = () => {
+    this.toggleNightModeOn();
+  };
+
+  toggleBackgroundColor = () => {
+    if (this.state.isNightModeOn)
+      document.body.style.backgroundColor = NIGHTMODE_COLOR;
+    else document.body.style.backgroundColor = BACKGROUND_COLOR;
+  };
+
+  toggleNightModeOn = () => {
+    this.setState(
+      (prevState) => ({
+        ...prevState,
+        isNightModeOn: !prevState.isNightModeOn,
+      }),
+      () => {
+        this.toggleBackgroundColor();
+      }
+    );
+  };
+
   render() {
-    const { dateString, timeString } = this.state;
+    const { dateString, timeString, isNightModeOn } = this.state;
+
+    const NightModeButton = () => {
+      return (
+        <button
+          className={
+            isNightModeOn ? "btn btn-sm btn-dark" : "btn btn-sm btn-secondary"
+          }
+          onClick={this.onNightModeClick}
+        >
+          Night Mode
+        </button>
+      );
+    };
 
     return (
       <div className="container-fluid p-3">
-        <div className="row justify-content-center px-md-5">
-          <div className="col-md-6">
-            <div className="card bg-dark text-white">
-              <div className="card-header text-center">
-                <h3 className="card-title font-weight-light">Clock</h3>
-              </div>
-              <div className="card-body">
-                <h1 className="text-center display-3">
-                  {timeString ? timeString : `Getting time...`}
-                </h1>
-              </div>
-              <div className="card-body">
-                <div className="text-center font-weight-light h4">
-                  {dateString ? dateString : `Getting date...`}
+        {isNightModeOn ? (
+          <div
+            className="justify-content-center text-light"
+            onClick={this.onNightModeClick}
+          >
+            <div className="row justify-content-center font-weight-light">
+              <h1 className="display-2">
+                {timeString ? timeString : `Getting time...`}
+              </h1>
+            </div>
+            <div className="row justify-content-center">
+              <p className="h3 font-weight-light">
+                {dateString ? dateString : `Getting date...`}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="row justify-content-center px-md-5">
+            <div className="col-md-6">
+              <div className="card bg-dark text-white">
+                <div className="card-header text-center">
+                  <h3 className="card-title font-weight-light">Clock</h3>
+                </div>
+                <div className="card-body">
+                  <div className="row justify-content-center">
+                    <h1 className="text-center display-3">
+                      {timeString ? timeString : `Getting time...`}
+                    </h1>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <div className="text-center font-weight-light h4">
+                    {dateString ? dateString : `Getting date...`}
+                  </div>
+                </div>
+                <div className="card-body">
+                  <div className="row justify-content-end px-3">
+                    <NightModeButton />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

@@ -5,8 +5,7 @@ import Home from "./components/Home";
 import Stopwatch from "./components/Stopwatch";
 import Timer from "./components/Timer";
 import NavBar from "./layout/NavBar";
-
-const BACKGROUND_COLOR = "#292b2c";
+import {BACKGROUND_COLOR} from "./services/colorService";
 
 class App extends Component {
 
@@ -21,7 +20,7 @@ class App extends Component {
           <div className="container-fluid">
             <NavBar/>
             <div>
-              <hr className="bg-white"/>
+              {/* <hr className="bg-white"/> */}
               <Switch>
                 <Route exact path="/">
                   <Home />
