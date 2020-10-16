@@ -58,6 +58,7 @@ class Clock extends PureComponent {
 
   onNightModeClick = () => {
     this.toggleNightModeOn();
+    this.props.toggleNavBar();
   };
 
   toggleBackgroundColor = () => {
@@ -85,61 +86,52 @@ class Clock extends PureComponent {
       return (
         <button
           className={
-            isNightModeOn ? "btn btn-sm btn-dark" : "btn btn-sm btn-secondary"
+            isNightModeOn
+              ? "btn btn-sm btn-dark text-secondary"
+              : "btn btn-secondary"
           }
           onClick={this.onNightModeClick}
         >
-          Night Mode
+          {isNightModeOn ? "Night Mode On" : "Night Mode Off"}
         </button>
       );
     };
 
     return (
       <div className="container-fluid p-3">
-        {isNightModeOn ? (
-          <div
-            className="justify-content-center text-light"
-            onClick={this.onNightModeClick}
-          >
-            <div className="row justify-content-center font-weight-light">
-              <h1 className="display-2">
-                {timeString ? timeString : `Getting time...`}
-              </h1>
-            </div>
-            <div className="row justify-content-center">
-              <p className="h3 font-weight-light">
-                {dateString ? dateString : `Getting date...`}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className="row justify-content-center px-md-5">
-            <div className="col-md-6">
-              <div className="card bg-dark text-white">
-                <div className="card-header text-center">
+        <div className="row justify-content-center px-md-5">
+          <div className="col-md-6">
+            <div
+              className={
+                isNightModeOn ? "text-secondary" : "text-white"
+              }
+            >
+              {isNightModeOn ? null : (
+                <div className="text-center">
                   <h3 className="card-title font-weight-light">Clock</h3>
                 </div>
-                <div className="card-body">
-                  <div className="row justify-content-center">
-                    <h1 className="text-center display-3">
-                      {timeString ? timeString : `Getting time...`}
-                    </h1>
-                  </div>
+              )}
+              <div className="p-3">
+                <div className="row justify-content-center">
+                  <h1 className="text-center display-3">
+                    {timeString ? timeString : `Getting time...`}
+                  </h1>
                 </div>
-                <div className="card-body">
-                  <div className="text-center font-weight-light h4">
-                    {dateString ? dateString : `Getting date...`}
-                  </div>
+              </div>
+              <div className="p-3">
+                <div className="text-center font-weight-light h4">
+                  {dateString ? dateString : `Getting date...`}
                 </div>
-                <div className="card-body">
-                  <div className="row justify-content-end px-3">
-                    <NightModeButton />
-                  </div>
+              </div>
+              <div className="p-3">
+                <div className="row justify-content-center">
+                  <NightModeButton />
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
+        )
       </div>
     );
   }

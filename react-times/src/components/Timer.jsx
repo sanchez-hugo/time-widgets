@@ -247,11 +247,11 @@ class Timer extends Component {
       <div className="container-fluid p-3">
         <div className="row justify-content-center px-md-5">
           <div className="col-md-6">
-            <div className="card bg-dark text-white">
-              <div className="card-header text-center">
+            <div className="text-white">
+              <div className="text-center">
                 <h3 className="card-title font-weight-light">Timer</h3>
               </div>
-              <div className="card-body">
+              <div className="p-3">
                 <div className="row justify-content-center">
                   {this.state.status.isComplete ? (
                     <div
@@ -319,7 +319,7 @@ class Timer extends Component {
                   </div>
                 </div>
               </div>
-              <div className="card-body">
+              <div className="p-3">
                 <div className="row justify-content-center px-3">
                   <div className="col-sm-12 col-md-10 row justify-content-between">
                     <data
@@ -381,7 +381,7 @@ class Timer extends Component {
                   </div>
                 </div>
               </div>
-              <div className="card-body">
+              <div className="p-3">
                 <div className="row justify-content-center px-3">
                   <div className=" btn-group">
                     <button

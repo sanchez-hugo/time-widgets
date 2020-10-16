@@ -171,11 +171,11 @@ class Stopwatch extends Component {
       <div className="container-fluid p-3">
         <div className="row justify-content-center px-md-5">
           <div className="col-md-6">
-            <div className="card bg-dark text-white">
-              <div className="card-header text-center">
+            <div className="text-white">
+              <div className="text-center">
                 <h3 className="card-title font-weight-light">Stopwatch</h3>
               </div>
-              <div className="card-body">
+              <div className="p-3">
                 <div className="row justify-content-center">
                   {this.state.status.isComplete ? (
                     <div
@@ -237,7 +237,7 @@ class Stopwatch extends Component {
                   </div>
                 </div>
               </div>
-              <div className="card-body">
+              <div className="p-3">
                 <div className="row justify-content-center px-3">
                   <div className=" btn-group">
                     {this.state.status.hasStarted ? (
